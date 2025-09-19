@@ -1,28 +1,42 @@
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
-
+// Frontend should not hold the OpenAI API key. Use the backend proxy at /api/openai
 export const chatWithGPT = async (message: string): Promise<string> => {
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+    const payload = {
+      model: 'gpt-3.5-turbo',
       messages: [
-        { 
-          role: "system", 
-          content: "あなたは可愛いリスのアシスタントです。やさしく丁寧に対応してください。" 
+        {
+          role: 'system',
+          content: 'あなたは可愛いリスのアシスタントです。やさしく丁寧に対応してください。'
         },
-        { 
-          role: "user", 
-          content: message 
+        {
+          role: 'user',
+          content: message
         }
-      ],
+      ]
+    };
+
+    const res = await fetch('/api/openai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
-    return response.choices[0].message.content || "申し訳ありません。返答を生成できませんでした。";
+
+    if (!res.ok) {
+      const err = await res.text();
+      console.error('OpenAI proxy error:', res.status, err);
+      return 'エラーが発生しました。もう一度お試しください。';
+    }
+
+    const data = await res.json();
+
+    // Expecting the proxy to forward OpenAI response unchanged
+    if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+      return data.choices[0].message.content;
+    }
+
+    return '申し訳ありません。返答を生成できませんでした。';
   } catch (error) {
-    console.error('OpenAI APIエラー:', error);
-    return "エラーが発生しました。もう一度お試しください。";
+    console.error('OpenAI proxy request failed:', error);
+    return 'エラーが発生しました。もう一度お試しください。';
   }
 };
