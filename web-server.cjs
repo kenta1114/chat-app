@@ -34,15 +34,18 @@ app.post("/api/openai", async (req, res) => {
 });
 
 // 静的ファイルを提供
+  console.log(`🚀 チャットアプリがWeb版で起動しました！`);
+  console.log(`📱 ブラウザで以下のURLを開いてください:`);
+  console.log(`   http://localhost:${PORT}`);
 app.use(express.static(__dirname));
 
 // ルートパスでindex.htmlを提供
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  console.log("\n👋 サーバーを停止しています..."); 
+  process.exit(0);
 });
 
 // サーバーを起動
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 チャットアプリがWeb版で起動しました！`);
   console.log(`📱 ブラウザで以下のURLを開いてください:`);
   console.log(`   http://localhost:${PORT}`);
