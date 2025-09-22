@@ -20,8 +20,8 @@ export default defineConfig({
     port: 5173,
   },
   preview: {
-    port: 4173,
     host: true,
-    allowedHosts: ['chat-app-electron.onrender.com', '.onrender.com'],
+    port: Number(process.env.PORT) || 4173,
+    allowedHosts: ['chat-app-electron.onrender.com']
   },
 })
