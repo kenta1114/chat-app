@@ -32,13 +32,13 @@ app.post('/api/openai', async (req, res) => {
 
     const text = await response.text()
 
-    // Try to parse JSON; if it fails, forward as text with proper status
+    // Try to parse JSON; if it fails, wrap text in JSON so client always receives JSON
     try {
       const data = JSON.parse(text)
       return res.status(response.status).json(data)
     } catch (err) {
-      console.warn('OpenAI proxy returned non-JSON response')
-      return res.status(response.status).send(text)
+      console.warn('OpenAI proxy returned non-JSON response; returning JSON wrapper')
+      return res.status(response.status).json({ error: text })
     }
   } catch (err) {
     console.error('OpenAI proxy request failed:', err)
