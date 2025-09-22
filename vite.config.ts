@@ -1,7 +1,8 @@
+/// <reference types="node" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { fileURLToPath } from 'url'
-import { dirname, resolve } from 'path'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
 
 // Compute repo root dir in ESM
 const __filename = fileURLToPath(import.meta.url)
@@ -13,7 +14,6 @@ export default defineConfig({
   root: resolve(__dirname, 'chat-app'),
   plugins: [react()],
   build: {
-    // Output to repo-level dist so Vercel can detect it automatically
     outDir: resolve(__dirname, 'dist'),
     emptyOutDir: true,
   },
