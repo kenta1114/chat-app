@@ -11,10 +11,9 @@ const __dirname = dirname(__filename)
 // Root-level Vite config so that running `vite build` from repo root
 // will build the app under ./chat-app and find its index.html
 export default defineConfig({
-  root: resolve(__dirname, 'chat-app'),
   plugins: [react()],
   build: {
-    outDir: resolve(__dirname, 'dist'),
+    outDir: resolve(__dirname, '../dist'),
     emptyOutDir: true,
   },
   server: {

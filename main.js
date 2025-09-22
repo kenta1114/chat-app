@@ -71,3 +71,4 @@ app.on('web-contents-created', (event, contents) => {
 app.on('before-quit',(event)=>{
   console.log('アプリを終了します...');
 });
+

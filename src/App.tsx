@@ -4,8 +4,9 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
-import { chatWithGPT } from './services/openai';  // パスを修正
+import { chatWithGPT } from './services/openai';
 import './App.css'
+// OpenAI SDKはフロントでは使わず、バックエンドのプロキシ経由で呼び出します
 
 export const App = () => {
   const [messages, setMessages] = useState<Message[]>([]);

@@ -7,10 +7,9 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 export default defineConfig({
-  root: resolve(__dirname, 'chat-app'),
   plugins: [react()],
   build: {
-    outDir: resolve(__dirname, 'dist'),
+    outDir: resolve(__dirname, '../dist'),
     emptyOutDir: true,
   },
   server: { port: 5173 },

@@ -21,7 +21,10 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    
+    /* Types */
+    "types": ["vite/client", "react", "react-dom", "react/jsx-runtime"]
   },
   "include": ["src"]
 }
