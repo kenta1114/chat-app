@@ -1,5 +1,5 @@
-import  { useState, useEffect } from "react";
-import { chatWithGPT } from "./services/openai";
+import { useState, useEffect } from "react";
+import { chatWithGPT, type ChatMessage } from "./services/openai";
 import "./App.css";
 
 // OpenAI SDKはフロントでは使わず、バックエンドのプロキシ経由で呼び出します
@@ -57,7 +57,12 @@ export const App = () => {
     setInput("");
     setIsLoading(true);
     try {
-      const response = await chatWithGPT(input);
+      // Build history for the model (strip timestamps)
+      const history: ChatMessage[] = [...messages, userMessage].map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
+      const response = await chatWithGPT(history);
       const assistantMessage: Message = {
         role: "assistant",
         content: response,

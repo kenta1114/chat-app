@@ -1,19 +1,37 @@
 // Frontend should not hold the OpenAI API key. Use the backend proxy at /api/openai
-export const chatWithGPT = async (message: string): Promise<string> => {
+export type ChatMessage = {
+  role: "user" | "assistant" | "system";
+  content: string;
+};
+
+const SYSTEM_PROMPT =
+  "あなたは可愛いリスのアシスタントです。やさしく丁寧に対応してください。";
+
+const MAX_HISTORY = 12; // send up to last 12 turns (messages array items)
+
+export const chatWithGPT = async (history: ChatMessage[]): Promise<string> => {
   try {
+    // Normalize and limit history; ensure only expected roles are forwarded
+    const trimmed = (history || [])
+      .filter(
+        (m) =>
+          m &&
+          (m.role === "user" ||
+            m.role === "assistant" ||
+            m.role === "system") &&
+          typeof m.content === "string"
+      )
+      .slice(-MAX_HISTORY);
+
+    // Prepend our system prompt if not present
+    const messages = [
+      { role: "system" as const, content: SYSTEM_PROMPT },
+      ...trimmed,
+    ];
+
     const payload = {
       model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content:
-            "あなたは可愛いリスのアシスタントです。やさしく丁寧に対応してください。",
-        },
-        {
-          role: "user",
-          content: message,
-        },
-      ],
+      messages,
     };
 
     const res = await fetch("/api/openai", {
