@@ -15,8 +15,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // Proxy endpoint for OpenAI: forwards requests to the OpenAI API using a server-side key
-const OPENAI_API_KEY =
-  process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY;
+// NOTE: Do not read VITE_* keys here to avoid accidental client-side exposure.
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 app.post("/api/openai", async (req, res) => {
   console.log(
